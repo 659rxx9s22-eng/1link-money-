@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>جاري التحويل...</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <h2 style="text-align:center; margin-top:50px;">جاري معالجة الرابط...</h2>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBf5F5vhbpu8fjp4rS9M-Uj-gUPR88qbds",
+            authDomain: "my-site-6f7ff.firebaseapp.com",
+            databaseURL: "https://my-site-6f7ff-default-rtdb.firebaseio.com",
+            projectId: "my-site-6f7ff",
+            storageBucket: "my-site-6f7ff.firebasestorage.app",
+            messagingSenderId: "171038692625",
+            appId: "1:171038692625:web:4f5d02855d65aef7a768b0"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const refId = urlParams.get('ref');
+
+        if (refId) {
+            const userRef = firebase.database().ref('Users/' + refId);
+            userRef.transaction((u) => {
+                if (u) {
+                    u.clicks = (u.clicks || 0) + 1;
+                    u.daily_earnings = Number(((u.daily_earnings || 0) + 0.02).toFixed(2));
+                    u.total_earnings = Number(((u.total_earnings || 0) + 0.02).toFixed(2));
+                }
+                return u;
+            }).then(() => {
+                // بعد ما تزيد الأرباح، نحوله لموقعك أو أي رابط ترويج
+                // window.location.href = "https://google.com"; 
+            });
+        }
+    </script>
+</body>
+</html>
